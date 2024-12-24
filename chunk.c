@@ -1,20 +1,20 @@
 #include <stdlib.h>
 
 #include "chunk.h"
-#include "lines.h"
+#include "lineInfo.h"
 #include "memory.h"
 
 void initChunk(Chunk* chunk) {
 	chunk->count = 0;
 	chunk->capacity = 0;
 	chunk->code = NULL;
-	initLines(&chunk->lines);
+	initLineInfo(&chunk->lineInfo);
 	initValueArray(&chunk->constants);
 }
 
 void freeChunk(Chunk* chunk) {
 	FREE_ARRAY(uint8_t, chunk->code, chunk->capacity);
-	freeLines(&chunk->lines);
+	freeLineInfo(&chunk->lineInfo);
 	freeValueArray(&chunk->constants);
 	initChunk(chunk);
 }
@@ -27,7 +27,7 @@ void writeChunk(Chunk* chunk, uint8_t byte, int line) {
 	}
 
 	chunk->code[chunk->count] = byte;
-	writeLines(&chunk->lines, line);
+	writeLineInfo(&chunk->lineInfo, line);
 	chunk->count++;
 }
 

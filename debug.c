@@ -2,7 +2,7 @@
 
 #include "debug.h"
 #include "value.h"
-#include "lines.h"
+#include "lineInfo.h"
 
 void disassembleChunk(Chunk* chunk, const char* name) {
 	printf("== %s ==\n", name);
@@ -27,10 +27,10 @@ static int simpleInstruction(const char* name, int offset) {
 
 int disassembleInstruction(Chunk* chunk, int offset) {
 	printf("%04d ", offset);
-	if (offset > 0 && getLine(&chunk->lines, offset) == getLine(&chunk->lines, offset - 1)) {
+	if (offset > 0 && getLine(&chunk->lineInfo, offset) == getLine(&chunk->lineInfo, offset - 1)) {
 		printf("	| ");
 	} else {
-		printf("%4d ", getLine(&chunk->lines, offset));
+		printf("%4d ", getLine(&chunk->lineInfo, offset));
 	}
 
 	uint8_t instruction = chunk->code[offset];

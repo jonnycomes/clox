@@ -4,8 +4,8 @@
 //             refers to as "hilariously wasteful of memory".             //
 ////////////////////////////////////////////////////////////////////////////
 
-#ifndef clox_lines_h
-#define clox_lines_h
+#ifndef clox_line_info_h
+#define clox_line_info_h
 
 #include "common.h"
 
@@ -13,11 +13,11 @@ typedef struct {
 	int size;
 	int* lines;
 	int* repeats;
-} Lines;
+} LineInfo;
 
-void initLines(Lines* lines);
-void writeLines(Lines* lines, int line);
-void freeLines(Lines* lines);
-int getLine(Lines* lines, int chunkIndex);
+void initLineInfo(LineInfo* lineInfo);
+void writeLineInfo(LineInfo* lineInfo, int line);
+void freeLineInfo(LineInfo* lineInfo);
+int getLine(LineInfo* lineInfo, int chunkIndex);
 
 #endif
