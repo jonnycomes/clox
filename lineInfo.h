@@ -11,6 +11,7 @@
 
 typedef struct {
 	int size;
+	int capacity;
 	int* lines;
 	int* repeats;
 } LineInfo;
