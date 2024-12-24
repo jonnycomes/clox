@@ -29,9 +29,7 @@ void freeLineInfo(LineInfo* lineInfo) {
 
 int getLine(LineInfo* lineInfo, int chunkIndex) {
 	int i = 0;
-	int chunkCount = 0;
-	while (chunkCount < chunkIndex + 1) {
-		chunkCount += lineInfo->repeats[i];
+	for (int chunkCount = 0; chunkCount <= chunkIndex; chunkCount += lineInfo->repeats[i];) {
 		i++;
 	}
 	return lineInfo->lines[i-1];
