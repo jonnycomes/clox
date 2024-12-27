@@ -32,12 +32,3 @@ void freeLineInfo(LineInfo* lineInfo) {
 	initLineInfo(lineInfo);
 }
 
-int getLine(LineInfo* lineInfo, int chunkIndex) {
-	int i = 0;
-	int chunkCount = 0;
-	while (chunkCount <= chunkIndex) {
-		chunkCount += lineInfo->repeats[i];
-		i++;
-	}
-	return lineInfo->lines[i-1];
-}

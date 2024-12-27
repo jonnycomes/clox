@@ -36,3 +36,13 @@ int addConstant(Chunk* chunk, Value value) {
 	return chunk->constants.count - 1;
 }
 
+int getLine(Chunk* chunk, int chunkIndex) {
+	int i = 0;
+	int chunkCount = 0;
+	while (chunkCount <= chunkIndex) {
+		chunkCount += chunk->lineInfo->repeats[i];
+		i++;
+	}
+	return chunk->lineInfo->lines[i-1];
+}
+

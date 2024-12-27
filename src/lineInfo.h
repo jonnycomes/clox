@@ -19,6 +19,5 @@ typedef struct {
 void initLineInfo(LineInfo* lineInfo);
 void writeLineInfo(LineInfo* lineInfo, int line);
 void freeLineInfo(LineInfo* lineInfo);
-int getLine(LineInfo* lineInfo, int chunkIndex);
 
 #endif
