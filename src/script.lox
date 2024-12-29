@@ -1,9 +1,12 @@
 print "Hello lox!";
 
-var x = 0;
+var x = 3;
+var y = 5;
 
-if (x > 1) {
-	print "big";
+print x and y;
+
+if (x and y) {
+	print "top";
 } else {
-	print "small";
+	print "bottom";
 }
