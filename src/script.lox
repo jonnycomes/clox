@@ -1,8 +1,5 @@
 print "Hello lox!";
 
-var x = 0;
-
-while (x < 3) {
+for (var x = 0; x < 3; x = x + 1) {
 	print x;
-	x = x + 1;
 }
