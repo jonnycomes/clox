@@ -1,16 +1,16 @@
 fun test(a, b) {
 	print a + b;
-//	return a + b;
+	return a + b;
 }
 
 fun more(a) {
-//	return test(a, a);
+	return test(a, a);
 }
 
 test(4, 2);
 
 print more("ho");
 
-//test(" ", more("ho"));
+test(" ", more("ho"));
 
 print 5;
