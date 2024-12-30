@@ -1,5 +1,5 @@
-print "Hello lox!";
-
-for (var x = 0; x < 3; x = x + 1) {
-	print x;
+fun areWeHavingItYet() {
+	print "Yes we are!!";
 }
+
+print areWeHavingItYet;
