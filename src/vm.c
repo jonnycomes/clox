@@ -30,9 +30,9 @@ static void runtimeError(const char* format, ...) {
 
 	for (int i = vm.frameCount - 1; i >= 0; i--) {
 		CallFrame* frame = &vm.frames[i];
-		ObjFunction* function = frame->function;
-		size_t instruction = frame->ip - frame->function->chunk.code - 1;
-		int line = getLine(&frame->function->chunk, instruction);
+		ObjFunction* function = frame->closure->function;
+		size_t instruction = frame->ip - frame->closure->function->chunk.code - 1;
+		int line = getLine(&frame->closure->function->chunk, instruction);
 		fprintf(stderr, "[line %d] in ", line);
 		if (function->name == NULL) {
 			fprintf(stderr, "script\n");
@@ -80,10 +80,10 @@ Value peek(int distance) {
 	return vm.stackTop[-1 - distance];
 }
 
-static bool call(ObjFunction* function, int argCount) {
-	if (argCount != function->arity) {
+static bool call(ObjClosure* closure, int argCount) {
+	if (argCount != closure->function->arity) {
 		runtimeError("Expected %d arguments but got %d.", 
-			function->arity, argCount);
+			closure->function->arity, argCount);
 		return false;
 	}
 
@@ -93,8 +93,8 @@ static bool call(ObjFunction* function, int argCount) {
 	}
 
 	CallFrame* frame = &vm.frames[vm.frameCount++];
-	frame->function = function;
-	frame->ip = function->chunk.code;
+	frame->closure = closure;
+	frame->ip = closure->function->chunk.code;
 	frame->slots = vm.stackTop - argCount - 1;
 	return true;
 }
@@ -102,8 +102,8 @@ static bool call(ObjFunction* function, int argCount) {
 static bool callValue(Value callee, int argCount) {
 	if (IS_OBJ(callee)) {
 		switch (OBJ_TYPE(callee)) {
-			case OBJ_FUNCTION: {
-				return call(AS_FUNCTION(callee), argCount);
+			case OBJ_CLOSURE: {
+				return call(AS_CLOSURE(callee), argCount);
 			}
 			case OBJ_NATIVE: {
 				NativeFn native = AS_NATIVE(callee);
@@ -146,7 +146,7 @@ static InterpretResult run() {
 #define READ_SHORT() \
 	(frame->ip += 2, (uint16_t)((frame->ip[-2] << 8) | frame->ip[-1]))
 
-#define READ_CONSTANT() (frame->function->chunk.constants.values[READ_BYTE()])
+#define READ_CONSTANT() (frame->closure->function->chunk.constants.values[READ_BYTE()])
 
 #define READ_STRING() AS_STRING(READ_CONSTANT())
 #define BINARY_OP(valueType, op) \
@@ -169,7 +169,7 @@ static InterpretResult run() {
 			printf(" ]");
 		}
 		printf("\n");
-		disassembleInstruction(&frame->function->chunk, (int)(frame->ip - frame->function->chunk.code));
+		disassembleInstruction(&frame->closure->function->chunk, (int)(frame->ip - frame->closure->function->chunk.code));
 #endif
 		uint8_t instruction;
 		switch (instruction = READ_BYTE()) {
@@ -281,6 +281,12 @@ static InterpretResult run() {
 				frame = &vm.frames[vm.frameCount - 1];
 				break;
 			}
+			case OP_CLOSURE: {
+				ObjFunction* function = AS_FUNCTION(READ_CONSTANT());
+				ObjClosure* closure = newClosure(function);
+				push(OBJ_VAL(closure));
+				break;
+			}
 			case OP_RETURN: {
 				Value result = pop();
 				vm.frameCount--;
@@ -309,7 +315,10 @@ InterpretResult interpret(const char* source) {
 	if (function == NULL) return INTERPRET_COMPILE_ERROR;
 
 	push(OBJ_VAL(function));
-	call(function, 0);
+	ObjClosure* closure = newClosure(function);
+	pop();
+	push(OBJ_VAL(closure));
+	call(closure, 0);
 
 	return run();
 }
