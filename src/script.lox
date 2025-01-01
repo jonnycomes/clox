@@ -6,4 +6,5 @@ fun outer() {
 	}
 	inner();
 }
-outer();
+var closure = outer();
+closure();
