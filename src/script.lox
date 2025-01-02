@@ -1,2 +1,3 @@
 class Yes {}
 print Yes;
+print Yes();
