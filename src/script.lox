@@ -5,3 +5,8 @@ y.first = 1;
 y.second = 2;
 
 print y.first + y.second;
+
+var first = 9;
+
+print first;
+print y.first;
