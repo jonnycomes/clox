@@ -1,3 +1,7 @@
 class Yes {}
-print Yes;
-print Yes();
+
+var y = Yes();
+y.first = 1;
+y.second = 2;
+
+print y.first + y.second;
