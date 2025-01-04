@@ -11,3 +11,5 @@ y.x = "!";
 var f = y.one;
 
 f("hello ", "there");
+
+print this;
