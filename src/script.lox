@@ -1,15 +1,17 @@
 class Yes {
+	init(x) {
+		this.x = x;
+	}
+
 	one(a, b) {
 		print a + b + this.x; 
 	}
 	two() {}
 }
 
-var y = Yes();
-y.x = "!";
+var y = Yes("!");
 
 var f = y.one;
 
 f("hello ", "there");
 
-print this;
