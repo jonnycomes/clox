@@ -1,4 +1,7 @@
-class Yes {}
+class Yes {
+	one() {}
+	two() {}
+}
 
 var y = Yes();
 y.first = 1;
