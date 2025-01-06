@@ -6,7 +6,9 @@ class Yes {
 	one(a, b) {
 		print a + b + this.x; 
 	}
-	two() {}
+	two() {
+		print "super!";
+	}
 }
 
 class No < Yes {
@@ -15,11 +17,12 @@ class No < Yes {
 	}
 
 	two() {
-		print x;
+		super.two();
+		print this.x;
 	}
 }
 
 var y = No("!");
 
 y.one("hi ", "there");
-
+y.two();
