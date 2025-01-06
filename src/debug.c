@@ -3,7 +3,6 @@
 #include "debug.h"
 #include "object.h"
 #include "value.h"
-#include "lineInfo.h"
 
 void disassembleChunk(Chunk* chunk, const char* name) {
 	printf("== %s ==\n", name);

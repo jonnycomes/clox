@@ -3,7 +3,6 @@
 
 #include "common.h"
 #include "value.h"
-#include "lineInfo.h"
 
 typedef enum {
 	OP_CONSTANT,
@@ -45,6 +44,18 @@ typedef enum {
 	OP_METHOD
 } OpCode;
 
+//////////       My Solution to Challenge 1 from Chapter 14        /////////
+// Encoding the lines for chunks using something like run-length encoding //
+//   to improve on Nystrom's given encoding of line information that he   //
+//             refers to as "hilariously wasteful of memory".             //
+////////////////////////////////////////////////////////////////////////////
+typedef struct {
+	int size;
+	int capacity;
+	int* lines;
+	int* repeats;
+} LineInfo;
+
 typedef struct {
 	int count;
 	int capacity;
@@ -53,10 +64,12 @@ typedef struct {
 	ValueArray constants;	
 } Chunk;
 
-
 void initChunk(Chunk* chunk);
 void freeChunk(Chunk* chunk);
 void writeChunk(Chunk* chunk, uint8_t byte, int line);
+void initLineInfo(LineInfo* lineInfo);
+void writeLineInfo(LineInfo* lineInfo, int line);
+void freeLineInfo(LineInfo* lineInfo);
 int addConstant(Chunk* chunk, Value value);
 int getLine(Chunk* chunk, int chunkIndex);
 

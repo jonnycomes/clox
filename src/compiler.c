@@ -932,4 +932,3 @@ void markCompilerRoots() {
 		compiler = compiler->enclosing;
 	}
 }
-
