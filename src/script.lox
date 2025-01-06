@@ -9,9 +9,17 @@ class Yes {
 	two() {}
 }
 
-var y = Yes("!");
+class No < Yes {
+	init(x) {
+		this.x = x;
+	}
 
-var f = y.one;
+	two() {
+		print x;
+	}
+}
 
-f("hello ", "there");
+var y = No("!");
+
+y.one("hi ", "there");
 
