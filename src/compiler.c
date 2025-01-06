@@ -263,7 +263,7 @@ static uint8_t identifierConstant(Token* name) {
 	return makeConstant(OBJ_VAL(copyString(name->start, name->length)));
 }
 
-static bool identifierEqual(Token* a, Token* b) {
+static bool identifiersEqual(Token* a, Token* b) {
 	if (a->length != b->length) return false;
 	return memcmp(a->start, b->start, a->length) == 0;
 }
@@ -271,7 +271,7 @@ static bool identifierEqual(Token* a, Token* b) {
 static int resolveLocal(Compiler* compiler, Token* name) {
 	for (int i = compiler->localCount - 1; i >= 0; i--) {
 		Local* local = &compiler->locals[i];
-		if (identifierEqual(name, &local->name)) {
+		if (identifiersEqual(name, &local->name)) {
 			if (local->depth == -1) {
 				error("Can't read local variable in its own initializer.");
 			}
@@ -342,7 +342,7 @@ static void declareVariable() {
 			break;
 		}
 
-		if (identifierEqual(name, &local->name)) {
+		if (identifiersEqual(name, &local->name)) {
 			error("Already a variable with this name in this scope.");
 		}
 	}
@@ -655,6 +655,18 @@ static void classDeclaration() {
 	ClassCompiler classCompiler;
 	classCompiler.enclosing = currentClass;
 	currentClass = &classCompiler;
+
+	if (match(TOKEN_LESS)) {
+		consume(TOKEN_IDENTIFIER, "Expect superclass name.");
+		variable(false);
+
+		if (identifiersEqual(&className, &parser.previous)) {
+			error("A class can't inherit from itself.");
+		}
+
+		namedVariable(className, false);
+		emitByte(OP_INHERIT);
+	}
 
 	namedVariable(className, false);
 	consume(TOKEN_LEFT_BRACE, "Expect '{' before class body.");
